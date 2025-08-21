@@ -3,6 +3,7 @@ import { ToastContainer } from "react-toastify";
 // import StoreProvider from "@/redux/StoreProvider";
 import "react-toastify/dist/ReactToastify.css";
 import Head from "next/head";
+import StoreProvider from "../redux/StoreProvider";
 
 export const metadata = {
   title: "Task Management",
@@ -34,10 +35,10 @@ export default function RootLayout({ children }) {
         <link rel="manifest" href="/site.webmanifest" />
       </Head>
       <body>
-        {/* <StoreProvider> */}
-        <ToastContainer style={{ zIndex: 999999 }} />
-        {children}
-        {/* </StoreProvider> */}
+        <StoreProvider>
+          <ToastContainer style={{ zIndex: 999999 }} />
+          {children}
+        </StoreProvider>
       </body>
     </html>
   );

@@ -1,14 +1,13 @@
 "use client";
 
-import * as React from "react";
-import { Button, TextField, Box, Typography } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useRouter } from "next/navigation";
-import { loginUser } from "@/src/lib/auth";
-import { toast } from "react-toastify";
+import { Box, TextField, Button, Typography } from "@mui/material";
+import { useState } from "react";
 
+// ✅ Validation schema with Yup
 const validationSchema = Yup.object({
   email: Yup.string()
     .email("Invalid email address")
@@ -18,8 +17,10 @@ const validationSchema = Yup.object({
     .min(6, "Password must be at least 6 characters"),
 });
 
-export default function LoginPage() {
+export default function SignupPage() {
   const router = useRouter();
+  const [serverError, setServerError] = useState(null);
+
   const {
     control,
     handleSubmit,
@@ -31,21 +32,30 @@ export default function LoginPage() {
   });
 
   const onSubmit = async (data) => {
-    try {
-      const result = await loginUser(data?.email, data?.password);
-      toast(result?.error);
+    setServerError(null);
 
-      if (result.success) {
-        // Navigate to dashboard
-        localStorage.setItem("user", JSON.stringify(result.user));
-        router.push("/Dashboard");
-      }
-    } catch (err) {
-      console.error("Login error:", err);
-      setError("password", {
-        type: "manual",
-        message: "Server error, try again",
+    try {
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
       });
+
+      const result = await res.json();
+
+      if (!res.ok || !result.success) {
+        setServerError(result.error || "Signup failed");
+        return; // stops here
+      }
+
+      // ✅ Signup successful
+      localStorage.setItem("user", JSON.stringify(result.user));
+      if (result.idToken) localStorage.setItem("token", result.idToken);
+
+      router.push("/Dashboard");
+    } catch (err) {
+      console.error("Signup error:", err);
+      setServerError("Network or server error, please try again");
     }
   };
 
@@ -62,7 +72,7 @@ export default function LoginPage() {
       }}
     >
       <Typography variant="h5" mb={2}>
-        Sign In
+        Sign Up
       </Typography>
 
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -105,13 +115,16 @@ export default function LoginPage() {
           fullWidth
           sx={{ mt: 2 }}
         >
-          {isSubmitting ? "Signing In..." : "Sign In"}
+          {isSubmitting ? "Signing up..." : "Sign Up"}
         </Button>
       </form>
 
-      <Button sx={{ mt: 2 }} onClick={() => router.push("/Signup")}>
-        Sign Up
-      </Button>
+      {serverError && (
+        <Typography color="error" sx={{ mt: 2 }}>
+          {serverError}
+        </Typography>
+      )}
+      <Button onClick={() => router.push("/Signin")}>Sign In</Button>
     </Box>
   );
 }

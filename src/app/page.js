@@ -2,14 +2,31 @@
 
 import { Button, Card, CardContent, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+// import { setUser } from "@/src/redux/auth/authSlice";
 
 export default function Home() {
   const router = useRouter();
+  useEffect(() => {
+    router.push("/Dashboard");
+  }, []);
+  return null;
+
   // useEffect(() => {
-  //   router.push("/Dashboard");
+  //   const user = JSON.parse(localStorage.getItem("user"));
+  //   if (user) dispatch(setUser(user));
   // }, []);
-  // return null;
+
+  // // for hydration error
+  // const [hydrated, setHydrated] = useState(false);
+  // useEffect(() => {
+  //   const savedUser = localStorage.getItem("user");
+  //   if (savedUser) dispatch(setUser(JSON.parse(savedUser)));
+  //   setHydrated(true);
+  // }, []);
+  // if (!hydrated) return null; // Wait until hydration
+
   return (
     <main className="container mx-auto py-12">
       <h1 className="text-3xl font-bold mb-6">Next.js + Tailwind + MUI</h1>
