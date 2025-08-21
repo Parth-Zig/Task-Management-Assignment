@@ -49,3 +49,45 @@ export async function POST(req) {
     });
   }
 }
+
+export async function GET(req) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const uid = searchParams.get('uid');
+    const role = searchParams.get('role');
+
+    if (!uid || !role) {
+      return new Response(
+        JSON.stringify({ error: "Missing uid or role parameter" }),
+        { status: 400 }
+      );
+    }
+
+    // Import here to avoid build issues
+    const { collection, query, where, getDocs } = await import('firebase/firestore');
+    
+    let q;
+    if (role === "admin") {
+      q = query(collection(db, "tasks"));
+    } else {
+      // User can see tasks they created OR are assigned to them
+      q = query(
+        collection(db, "tasks"),
+        where("ownerId", "==", uid)
+      );
+    }
+
+    const snapshot = await getDocs(q);
+    const tasks = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+
+    return new Response(JSON.stringify({ tasks }), { status: 200 });
+  } catch (err) {
+    console.error("Fetch tasks error:", err);
+    return new Response(JSON.stringify({ error: err.message }), {
+      status: 500,
+    });
+  }
+}

@@ -5,11 +5,13 @@ import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 
 export async function POST(req) {
   try {
-    let email, password;
+    let email, password, displayName, role;
     try {
       const body = await req.json();
       email = body.email;
       password = body.password;
+      displayName = body.displayName || "";
+      role = body.role || "user"; // Default to user if not specified
     } catch (e) {
       return NextResponse.json(
         { success: false, error: "Invalid request body" },
@@ -20,6 +22,14 @@ export async function POST(req) {
     if (!email || !password) {
       return NextResponse.json(
         { success: false, error: "Email and password are required" },
+        { status: 400 }
+      );
+    }
+
+    // Validate role
+    if (role !== "user" && role !== "admin") {
+      return NextResponse.json(
+        { success: false, error: "Invalid role specified" },
         { status: 400 }
       );
     }
@@ -45,8 +55,10 @@ export async function POST(req) {
       await setDoc(doc(db, "users", user.uid), {
         uid: user.uid,
         email: user.email,
-        role: "user",
+        displayName: displayName,
+        role: role,
         createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
       });
     } catch (e) {
       return NextResponse.json(
@@ -62,7 +74,12 @@ export async function POST(req) {
 
     return NextResponse.json({
       success: true,
-      user: { uid: user.uid, email: user.email, role: "user" },
+      user: { 
+        uid: user.uid, 
+        email: user.email, 
+        displayName: displayName,
+        role: role 
+      },
       idToken,
     });
   } catch (err) {

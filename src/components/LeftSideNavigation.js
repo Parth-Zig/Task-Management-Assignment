@@ -10,10 +10,15 @@ import {
   ListItemText,
 } from "@mui/material";
 import Link from "next/link";
+import { logoutUser } from "@/src/lib/auth";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { resetAuthState } from "@/src/redux/reducers/auth/authSlice";
 
 export const LeftSideNavigation = () => {
   const pathname = usePathname();
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const navItems = [
     { label: "Task List", href: "/TaskList" },
@@ -23,10 +28,24 @@ export const LeftSideNavigation = () => {
   // Logout handler
   const handleLogout = async () => {
     try {
-      localStorage.removeItem("user");
-      router.push("/Signin");
+      const result = await logoutUser();
+      // Clear Redux state
+      dispatch(resetAuthState());
+      
+      if (result.success) {
+        toast.success("Logged out successfully");
+        router.push("/Signin");
+      } else {
+        toast.error("Logout failed, but local data cleared");
+        router.push("/Signin");
+      }
     } catch (error) {
-      console.error("Logout failed:", error);
+      console.error("Logout error:", error);
+      // Clear Redux state even if there's an error
+      dispatch(resetAuthState());
+      toast.error("Logout error occurred");
+      // Force redirect even if there's an error
+      router.push("/Signin");
     }
   };
 

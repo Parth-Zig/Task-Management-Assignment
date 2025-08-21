@@ -1,42 +1,34 @@
-// import "./globals.css";
+import "./globals.css";
 import { ToastContainer } from "react-toastify";
-// import StoreProvider from "@/redux/StoreProvider";
 import "react-toastify/dist/ReactToastify.css";
-import Head from "next/head";
 import StoreProvider from "../redux/StoreProvider";
 
 export const metadata = {
-  title: "Task Management",
+  title: "Task Management System",
+  description: "A comprehensive task management application",
+  keywords: "task management, productivity, project management",
+  authors: [{ name: "Task Management Team" }],
+  viewport: "width=device-width, initial-scale=1",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <Head>
-        <title>Task Management</title>
-
-        <link
-          rel="icon"
-          type="image/png"
-          href="task-management-assignment/src/app/favicon.ico"
-          sizes="96x96"
-        />
-        <link
-          rel="icon"
-          type="image/svg+xml"
-          href="task-management-assignment/src/app/favicon.ico"
-        />
-        <link rel="shortcut icon" href="/favicon.ico" />
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="/apple-touch-icon.png"
-        />
-        <link rel="manifest" href="/site.webmanifest" />
-      </Head>
       <body>
         <StoreProvider>
-          <ToastContainer style={{ zIndex: 999999 }} />
+          <ToastContainer 
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+            style={{ zIndex: 999999 }}
+          />
           {children}
         </StoreProvider>
       </body>
