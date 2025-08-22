@@ -14,6 +14,8 @@ import {
   CssBaseline,
   Button,
   Chip,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Logout, AccountCircle } from "@mui/icons-material";
@@ -27,6 +29,8 @@ export default function DashboardLayout({ children }) {
   const router = useRouter();
   const { user } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
+  let theme = useTheme();
+  let smDown = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
 
@@ -137,6 +141,7 @@ export default function DashboardLayout({ children }) {
           {/* Top bar with user info and logout */}
           <Box
             sx={{
+              mt: smDown ? 6 : 0,
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",

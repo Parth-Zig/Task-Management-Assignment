@@ -152,31 +152,47 @@ export default function DataTable({
                   <Search sx={{ mr: 1, color: "text.secondary" }} />
                 ),
               }}
-              sx={{ minWidth: 200 }}
+              sx={{
+                minWidth: 200,
+                mb: { xs: "16px !important", sm: "0 !important" },
+              }}
             />
           )}
 
           {/* Filters */}
-          {filterOptions.map((option) => (
-            <FormControl key={option.key} size="small" sx={{ minWidth: 120 }}>
-              <InputLabel>{option.label}</InputLabel>
-              <Select
-                value={filters[option.key] || ""}
-                onChange={(e) => handleFilterChange(option.key, e.target.value)}
-                label={option.label}
-                startAdornment={
-                  <FilterList sx={{ mr: 1, color: "text.secondary" }} />
-                }
-              >
-                <MenuItem value="">All</MenuItem>
-                {option.values.map((valueObj, idx) => (
-                  <MenuItem key={valueObj.value || idx} value={valueObj.value}>
-                    {valueObj.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          ))}
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: { xs: 2, sm: 1 },
+            }}
+          >
+            {filterOptions.map((option) => (
+              <FormControl key={option.key} size="small" sx={{ minWidth: 120 }}>
+                <InputLabel>{option.label}</InputLabel>
+                <Select
+                  value={filters[option.key] || ""}
+                  onChange={(e) =>
+                    handleFilterChange(option.key, e.target.value)
+                  }
+                  label={option.label}
+                  startAdornment={
+                    <FilterList sx={{ mr: 1, color: "text.secondary" }} />
+                  }
+                >
+                  <MenuItem value="">All</MenuItem>
+                  {option.values.map((valueObj, idx) => (
+                    <MenuItem
+                      key={valueObj.value || idx}
+                      value={valueObj.value}
+                    >
+                      {valueObj.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            ))}
+          </Box>
         </Stack>
       </Box>
 

@@ -39,6 +39,7 @@ export default function TaskList() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [openAdd, setOpenAdd] = useState(false);
+
   useEffect(() => {
     if (authLoading) return;
     if (!user) return;
@@ -117,6 +118,7 @@ export default function TaskList() {
           gap: 2,
           mb: 2,
           flexWrap: "wrap",
+          flexDirection: smDown ? "column" : "row",
         }}
       >
         <TextField
@@ -125,7 +127,7 @@ export default function TaskList() {
           fullWidth
           placeholder="Search tasks by Title, Description"
           label="Search"
-          sx={{ flex: 1, height: "56px" }}
+          sx={{ flex: 1, height: "56px", minWidth: "200px" }}
         />
 
         <FormControl sx={{ minWidth: 200 }}>

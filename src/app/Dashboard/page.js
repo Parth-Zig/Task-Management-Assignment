@@ -48,7 +48,8 @@ export default function DashboardPage() {
       </Box>
     );
   }
-
+  const hasCreatedData = createdData.some((d) => d.value > 0);
+  const hasAssignedData = assignedData.some((d) => d.value > 0);
   return (
     <>
       <Typography variant="h4" gutterBottom sx={{ mb: 4 }}>
@@ -57,7 +58,7 @@ export default function DashboardPage() {
 
       <Grid container spacing={3} sx={{ mb: 4 }}>
         <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ height: "100%" }}>
+          <Card sx={{ height: "100%", width: "250px" }}>
             <CardContent>
               <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
                 <Assignment color="primary" sx={{ mr: 1 }} />
@@ -73,7 +74,7 @@ export default function DashboardPage() {
         </Grid>
 
         <Grid item xs={12} sm={6} md={3}>
-          <Card sx={{ height: "100%" }}>
+          <Card sx={{ height: "100%", width: "250px" }}>
             <CardContent>
               <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
                 <Person color="primary" sx={{ mr: 1 }} />
@@ -91,62 +92,98 @@ export default function DashboardPage() {
 
       {/* Charts */}
       <Grid container spacing={3}>
-        {/* 1 */}
+        {/* Created Tasks */}
         <Grid item xs={12} md={6}>
-          <Card>
+          <Card sx={{ width: "250px" }}>
             <CardContent>
               <Typography variant="h6" gutterBottom>
                 Created Tasks Status
               </Typography>
-              <ResponsiveContainer width="100%" height={300}>
-                <PieChart>
-                  <Pie
-                    data={createdData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={100}
-                    paddingAngle={5}
-                    dataKey="value"
-                  >
-                    {createdData.map((entry, index) => (
-                      <Cell key={index} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
+
+              {hasCreatedData ? (
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={createdData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={60}
+                      outerRadius={100}
+                      paddingAngle={5}
+                      dataKey="value"
+                    >
+                      {createdData.map((entry, index) => (
+                        <Cell
+                          key={index}
+                          fill={COLORS[index % COLORS.length]}
+                        />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              ) : (
+                <Box
+                  sx={{
+                    height: 300,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "text.secondary",
+                  }}
+                >
+                  <Typography>No data available</Typography>
+                </Box>
+              )}
             </CardContent>
           </Card>
         </Grid>
 
-        {/* 2 */}
+        {/* Assigned Tasks */}
         <Grid item xs={12} md={6}>
-          <Card>
+          <Card sx={{ width: "250px" }}>
             <CardContent>
               <Typography variant="h6" gutterBottom>
                 Assigned Tasks Status
               </Typography>
-              <ResponsiveContainer width="100%" height={300}>
-                <PieChart>
-                  <Pie
-                    data={assignedData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={100}
-                    paddingAngle={5}
-                    dataKey="value"
-                  >
-                    {assignedData.map((entry, index) => (
-                      <Cell key={index} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
+
+              {hasAssignedData ? (
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={assignedData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={60}
+                      outerRadius={100}
+                      paddingAngle={5}
+                      dataKey="value"
+                    >
+                      {assignedData.map((entry, index) => (
+                        <Cell
+                          key={index}
+                          fill={COLORS[index % COLORS.length]}
+                        />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
+              ) : (
+                <Box
+                  sx={{
+                    height: 300,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "text.secondary",
+                  }}
+                >
+                  <Typography>No data available</Typography>
+                </Box>
+              )}
             </CardContent>
           </Card>
         </Grid>
