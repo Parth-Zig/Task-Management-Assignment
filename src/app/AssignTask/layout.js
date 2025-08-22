@@ -98,7 +98,7 @@ export default function AssignTaskLayout({ children }) {
             width: { sm: `calc(100% - ${drawerWidth}px)` },
           }}
         >
-          <Toolbar /> {/* spacing for AppBar */}
+          <Toolbar />
           {children}
         </Box>
       </Box>

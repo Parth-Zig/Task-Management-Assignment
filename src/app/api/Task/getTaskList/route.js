@@ -12,7 +12,7 @@ export async function GET(req) {
     if (role === "user") {
       q = query(collection(db, "tasks"), where("createdBy", "==", uid));
     } else {
-      q = collection(db, "tasks"); // fetch all
+      q = collection(db, "tasks");
     }
 
     const snapshot = await getDocs(q);

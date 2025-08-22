@@ -20,16 +20,6 @@ export const LeftSideNavigation = () => {
     { label: "Assign Task", href: "/AssignTask" },
   ];
 
-  // Logout handler
-  const handleLogout = async () => {
-    try {
-      localStorage.removeItem("user");
-      router.push("/Signin");
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
-  };
-
   return (
     <Box
       sx={{
@@ -79,22 +69,6 @@ export const LeftSideNavigation = () => {
           </ListItemButton>
         ))}
       </List>
-
-      {/* Logout button at bottom */}
-      <Box sx={{ mt: "auto" }}>
-        <ListItemButton
-          onClick={handleLogout}
-          sx={{
-            borderRadius: 1,
-            bgcolor: "error.main",
-            "&:hover": {
-              bgcolor: "error.dark",
-            },
-          }}
-        >
-          <ListItemText primary="Logout" sx={{ color: "white" }} />
-        </ListItemButton>
-      </Box>
     </Box>
   );
 };
